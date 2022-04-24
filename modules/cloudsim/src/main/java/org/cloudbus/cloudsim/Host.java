@@ -57,7 +57,8 @@ public class Host {
 
 	/** The datacenter where the host is placed. */
 	private Datacenter datacenter;
-
+	
+	private float priority;
 	/**
 	 * Instantiates a new host.
 	 * 
@@ -636,5 +637,12 @@ public class Host {
 				+ bwProvisioner + ", vmScheduler=" + vmScheduler + ", vmList=" + vmList + ", peList=" + peList
 				+ ", failed=" + failed + ", vmsMigratingIn=" + vmsMigratingIn + ", datacenter=" + datacenter + "]";
 	}
-
+	
+	public void setPriority(float priority) {
+		this.priority = priority;
+	}
+	
+	public float getPriority() {
+		return this.priority;
+	}
 }

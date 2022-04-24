@@ -13,6 +13,7 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+import org.cloudbus.cloudsim.Fuzzylogic.FIS;
 import org.cloudbus.cloudsim.core.CloudSim;
 
 /**
@@ -24,6 +25,10 @@ import org.cloudbus.cloudsim.core.CloudSim;
  */
 public class VmAllocationPolicyFuzzy extends VmAllocationPolicy {
 
+	FIS fis;
+	private float maxPriority;
+	private float crisp;
+	int idx = -1;
 	/** The map between each VM and its allocated host.
          * The map key is a VM UID and the value is the allocated host for that VM. */
 	private Map<String, Host> vmTable;
@@ -48,13 +53,31 @@ public class VmAllocationPolicyFuzzy extends VmAllocationPolicy {
 		setFreePes(new ArrayList<Integer>());
 		for (Host host : getHostList()) {
 			getFreePes().add(host.getNumberOfPes());
-
+//			System.out.println(host.get)
 		}
 
 		setVmTable(new HashMap<String, Host>());
 		setUsedPes(new HashMap<String, Integer>());
 	}
-
+	
+//	public void getPriority() {
+//		int counter = 0;
+//		for (Host host : getHostList()) {
+//			System.out.println("Host: "+(counter+1)+"--> RAM: "+host.getRamProvisioner().getAvailableRam()+" MIPS: "+host.getAvailableMips()+" PE: "+host.getNumberOfFreePes());
+//		fis.fuzz.input.ram.init(host.getRamProvisioner().getAvailableRam());
+//		fis.fuzz.input.mips.init((float)host.getAvailableMips());
+//		fis.fuzz.input.pe.init(host.getNumberOfFreePes());
+//		fis.initFISRules(fis.defuzz.output);
+//		crisp = fis.defuzz.defuzzification();
+//		System.out.println("crisp value: "+crisp);
+//		if(crisp!=0)
+//		host.setPriority(crisp);
+//		counter++;
+//		}
+		
+//		System.out.println(fis.defuzz.output.toString());
+//		System.out.println("crisp value is "+fis.defuzz.defuzzification());
+//	}
 	/**
 	 * Allocates the host with less PEs in use for a given VM.
 	 * 
@@ -67,8 +90,8 @@ public class VmAllocationPolicyFuzzy extends VmAllocationPolicy {
 	public boolean allocateHostForVm(Vm vm) {
 		System.out.println("vm requested Mips are "+vm.getMips());
 		System.out.println("vm requested ram is "+vm.getRam());
-		System.out.println("vm requested BW is "+vm.getBw());
-		System.out.println("vm requested size is "+vm.getSize());
+//		System.out.println("vm requested BW is "+vm.getBw());
+//		System.out.println("vm requested size is "+vm.getSize());
 		System.out.println("vm requested Pes are "+vm.getNumberOfPes());
 		System.out.println("");
 		int requiredPes = vm.getNumberOfPes();
@@ -78,29 +101,66 @@ public class VmAllocationPolicyFuzzy extends VmAllocationPolicy {
 		for (Integer freePes : getFreePes()) {
 			freePesTmp.add(freePes);
 		}
-
+//		getPriority();
+//		Host tempHost;
+//		for (Host host : getHostList()) {
+//			System.out.println(host.getPriority());
+//			if(maxPriority<host.getPriority()) {
+//			maxPriority = host.getPriority();
+//			tempHost = host;
+//			}
+//		}
+//		System.out.println("maximum priority:"+ maxPriority);
+		
 		if (!getVmTable().containsKey(vm.getUid())) { // if this vm was not created
 			do {// we still trying until we find a host or until we try all of them
-				int moreFree = Integer.MIN_VALUE;
-				int idx = -1;
-
+//				int moreFree = Integer.MIN_VALUE;
+//				idx = -1;
+				maxPriority=0.0f;
+				int counter = 0;
+				for (Host host : getHostList()) {
+					fis = new FIS();
+					System.out.println("Host: "+(counter+1)+"--> RAM: "+host.getRamProvisioner().getAvailableRam()+" MIPS: "+host.getAvailableMips()+" PE: "+freePesTmp.get(counter));
+					fis.fuzz.input.ram.init(host.getRamProvisioner().getAvailableRam());
+					fis.fuzz.input.mips.init((float)host.getAvailableMips());
+					fis.fuzz.input.pe.init(freePesTmp.get(counter));
+					fis.initFISRules(fis.defuzz.output);
+					crisp = fis.defuzz.defuzzification();
+					System.out.println("crisp value: "+crisp);
+	//				if(crisp!=0)
+					host.setPriority(crisp);
+					counter++;
+				}
 				// we want the host with less pes in use
-				for (int i = 0; i < freePesTmp.size(); i++) {
-					System.out.println("Host #"+i+" available MIPS are "+getHostList().get(i).getAvailableMips());
-					System.out.println("Available storage is "+getHostList().get(i).getStorage());
-					System.out.println("Available bandwidth is "+getHostList().get(i).getBw());
-					System.out.println("Available ram is "+getHostList().get(i).getRam());
-					System.out.println("Available PE are "+getFreePes().get(i));
+				for (int i = 0; i < getHostList().size(); i++) {
+//					for (int i = 0; i < freePesTmp.size(); i++) {
+//					System.out.println("Host #"+i+" available MIPS are "+getHostList().get(i).getAvailableMips());
+//					System.out.println("Available storage is "+getHostList().get(i).getStorage());
+//					System.out.println("Available bandwidth is "+getHostList().get(i).getBw());
+//					System.out.println("Available ram is "+getHostList().get(i).getRam());
+//					System.out.println("Available PE are "+getFreePes().get(i));
 //					System.out.println("Total PE are "+getHostList().get(i).getNumberOfPes());
 					System.out.println("");
-					if (freePesTmp.get(i) > moreFree) {
-						moreFree = freePesTmp.get(i);
+					System.out.println("index: "+idx+" host id: "+getHostList().get(i).getId());
+					if (getHostList().get(i).getPriority() > maxPriority&&idx!=getHostList().get(i).getId()) {
+						maxPriority = getHostList().get(i).getPriority();
 						idx = i;
+						System.out.println("Host: "+i+" host priority: "+getHostList().get(i).getPriority()+" max priority: "+maxPriority);
 						System.out.println("Selected Host is "+getHostList().get(i));
+						System.out.println("Mips: "+getHostList().get(i).getAvailableMips());
+						System.out.println("PE: "+getHostList().get(i).getNumberOfFreePes());
+						System.out.println("RAM: "+getHostList().get(i).getRamProvisioner().getAvailableRam());
 						System.out.println("");
 					}
+//					if (freePesTmp.get(i) > moreFree) {
+//						moreFree = freePesTmp.get(i);
+//						idx = i;
+//						System.out.println("Selected Host is "+getHostList().get(i));
+//						System.out.println("");
+//					}
 				}
-
+//				System.out.println("maximum priority:"+ maxPriority);
+				System.out.println("index: "+idx);
 				Host host = getHostList().get(idx);
 				result = host.vmCreate(vm);
 
@@ -220,4 +280,5 @@ public class VmAllocationPolicyFuzzy extends VmAllocationPolicy {
 
 		return false;
 	}
+	
 }
