@@ -36,32 +36,41 @@ public class MIPS {
 		}
 		
 	// calculate the membership function values
-	public void init(float f) {
-		if(f<250 || f>1000)
-			System.out.println("Please enter value for MIPS >=250 and <=1000");
-		
-		if(f>=250&&f<625) {
-			lowV=(625-f)/(625-250);
+	public void init(float mips) {
+		if(mips<250) {
+			lowV=1;
+			low=true;
+			medV=0;
+			highV=0;
+		}
+		else if(mips>=250&&mips<625) {
+			lowV=(625-mips)/(625-250);
 			low=true;
 			
-			medV=(f-250)/(625-250);
-			if(f!=250)
+			medV=(mips-250)/(625-250);
+			if(mips!=250)
 				med=true;
 			highV=0;
 		}
-//		if(f==625) {
-//			lowV=0;
-//			medV=1;
-//			med=true;
-//			highV=0;
-//		}
-		if(f>625&&f<=1000) {
+		else if(mips==625) {
 			lowV=0;
-			medV=(1000-f)/(1000-625);
-			if(f!=1000)
+			medV=1;
+			med=true;
+			highV=0;
+		}
+		else if(mips>625&&mips<=1000) {
+			lowV=0;
+			medV=(1000-mips)/(1000-625);
+			if(mips!=1000)
 			med=true;
 			
-			highV=(f-625)/(1000-625);
+			highV=(mips-625)/(1000-625);
+			high=true;
+		}
+		else if(mips>1000) {
+			lowV=0;
+			medV=0;
+			highV=1;
 			high=true;
 		}
 	}

@@ -13,6 +13,7 @@ package org.cloudbus.cloudsim.examples;
 import java.text.DecimalFormat;
 import java.util.ArrayList;
 import java.util.Calendar;
+import java.util.Date;
 import java.util.LinkedList;
 import java.util.List;
 
@@ -44,6 +45,8 @@ import org.cloudbus.cloudsim.provisioners.RamProvisionerSimple;
  * VMs with the same MIPS requirements.
  * The cloudlets will take the same time to
  * complete the execution.
+ * 
+ * This is the edited version of CloudSimExample2
  */
 public class Simulation2 {
 
@@ -70,7 +73,7 @@ public class Simulation2 {
 
 	            	// Initialize the CloudSim library
 	            	CloudSim.init(num_user, calendar, trace_flag);
-
+	            	
 	            	// Second step: Create Datacenters
 	            	//Datacenters are the resource providers in CloudSim. We need at list one of them to run a CloudSim simulation
 	            	@SuppressWarnings("unused")
@@ -117,7 +120,7 @@ public class Simulation2 {
 	            	long fileSize = 300;
 	            	long outputSize = 300;
 	            	UtilizationModel utilizationModel = new UtilizationModelFull();
-	            	for (int i = 0; i < 40; i++) {
+	            	for (int i = 0; i < 80; i++) {
 	            	cloudlet = new Cloudlet(i, length, pesNumber, fileSize, outputSize, utilizationModel, utilizationModel, utilizationModel);
 	            	cloudlet.setUserId(brokerId);
 
@@ -139,14 +142,21 @@ public class Simulation2 {
 //	            	broker.bindCloudletToVm(cloudlet2.getCloudletId(),vm.getId());
 //	            	}
 	            	// Sixth step: Starts the simulation
+	            	
+	            	long timeStart= System.nanoTime();
+	            	System.out.println(timeStart);
+	            	
 	            	CloudSim.startSimulation();
-
-
+	            	
 	            	// Final step: Print results when simulation is over
 	            	List<Cloudlet> newList = broker.getCloudletReceivedList();
 
 	            	CloudSim.stopSimulation();
-
+	            	
+	            	long timeEnd= System.nanoTime();
+	            	System.out.println(timeEnd);
+	            	System.out.println("Simulation took time "+ (timeEnd - timeStart)/1000000+" milliseconds");
+	            	
 	            	printCloudletList(newList);
 
 	            	Log.printLine("CloudSimExample2 finished!");
@@ -178,12 +188,12 @@ public class Simulation2 {
 	    	peList.add(new Pe(0, new PeProvisionerSimple(mips))); // need to store Pe id and MIPS Rating
 	    	peList.add(new Pe(1, new PeProvisionerSimple(mips)));
 	    	if(i%2==0) {
-	    		
 	    	peList.add(new Pe(2, new PeProvisionerSimple(mips)));
 	    	peList.add(new Pe(3, new PeProvisionerSimple(mips)));
+	    	}
+	    	
 	        //4. Create Host with its id and list of PEs and add them to the list of machines
 	        //int hostId=0;
-	    	}
 
 	        hostList.add(
 	    			new Host(
@@ -249,6 +259,7 @@ public class Simulation2 {
 	        Cloudlet cloudlet;
 
 	        String indent = "    ";
+	        String indentplus = "     ";
 	        Log.printLine();
 	        Log.printLine("========== OUTPUT ==========");
 	        Log.printLine("Cloudlet ID" + indent + "STATUS" + indent +
@@ -257,14 +268,22 @@ public class Simulation2 {
 	        DecimalFormat dft = new DecimalFormat("###.##");
 	        for (int i = 0; i < size; i++) {
 	            cloudlet = list.get(i);
-	            Log.print(indent + cloudlet.getCloudletId() + indent + indent);
-
+	            if (cloudlet.getCloudletId()<10) {
+	            Log.print(indent + cloudlet.getCloudletId() +" " + indent + indent);
+	            }else
+	            	  Log.print(indent + cloudlet.getCloudletId() + indent + indent);
 	            if (cloudlet.getCloudletStatus() == Cloudlet.SUCCESS){
 	                Log.print("SUCCESS");
-
+	                if (cloudlet.getVmId()<10) {
+	                	Log.printLine( indent + indent + cloudlet.getResourceId() + indent + indent + indent + cloudlet.getVmId() +" "+
+	                			indent + indent + dft.format(cloudlet.getActualCPUTime()) + indent + indent + dft.format(cloudlet.getExecStartTime())+
+	                                indent + indent + dft.format(cloudlet.getFinishTime()));
+	                }
+	                else {
 	            	Log.printLine( indent + indent + cloudlet.getResourceId() + indent + indent + indent + cloudlet.getVmId() +
 	                     indent + indent + dft.format(cloudlet.getActualCPUTime()) + indent + indent + dft.format(cloudlet.getExecStartTime())+
                              indent + indent + dft.format(cloudlet.getFinishTime()));
+	                }
 	            }
 	        }
 

@@ -7,7 +7,7 @@ public class RAM {
 		boolean high = false;
 		
 		// use these to get the calculated values
-		float lowV ;
+		float lowV;
 		float medV;
 		float highV;
 		
@@ -36,34 +36,43 @@ public class RAM {
 		}
 		
 	// calculate the membership function values
-	public void init(float f) {
-		if(f<512 || f>2048)
-			System.out.println("Please enter value for RAM >=512 and <=2048");
-		
-		if(f>=512&&f<1280) {
-			lowV=(1280-f)/(1280-512);
+	public void init(float ram) {
+		if(ram<512) {
+			lowV=1;
+			low=true;
+			medV=0;
+			highV=0;
+		}
+		else if(ram>=512&&ram<1280) {
+			lowV=(1280-ram)/(1280-512);
 			low=true;
 
-			medV=(f-512)/(1280-512);
-			if(f!=512)
+			medV=(ram-512)/(1280-512);
+			if(ram!=512)
 			med=true;
 			
 			highV=0;
 		}
-//		else if(f==1280) {
-//			lowV=0;
-//			medV=1;
-//			med=true;
-//			highV=0;
-//		}
-		else if(f>1280&&f<=2048) {
+		else if(ram==1280) {
+			lowV=0;
+			medV=1;
+			med=true;
+			highV=0;
+		}
+		else if(ram>1280&&ram<=2048) {
 			lowV=0;
 			
-			medV=(2048-f)/(2048-1280);
-			if(f!=2048)
+			medV=(2048-ram)/(2048-1280);
+			if(ram!=2048)
 			med=true;
 			
-			highV=(f-1280)/(2048-1280);
+			highV=(ram-1280)/(2048-1280);
+			high=true;
+		}
+		else if(ram>2048) {
+			lowV=0;
+			medV=0;
+			highV=1;
 			high=true;
 		}
 	}

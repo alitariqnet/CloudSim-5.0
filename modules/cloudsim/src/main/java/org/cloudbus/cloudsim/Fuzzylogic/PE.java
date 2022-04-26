@@ -36,28 +36,42 @@ public class PE {
 		}
 		
 	// calculate the membership function values
-	public void init(float f) {
+	public void init(float pe) {
 		
-		if(f<1 || f>4)
-			System.out.println("Please enter value for PE >=1 and <=4");
-		
-		if(f>=1&&f<2.5) {
-			lowV=(float) ((2.5-f)/(2.5-1));
+		if(pe<1) {
+			low=true;
+			lowV=1;
+			medV=0;
+			highV=0;
+		}
+		else if(pe>=1&&pe<2.5) {
+			lowV=(float) ((2.5-pe)/(2.5-1));
 			low=true;
 			
-			medV=(float) ((f-1)/(2.5-1));
-			if(f!=1)
+			medV=(float) ((pe-1)/(2.5-1));
+			if(pe!=1)
 			med=true;
 			highV=0;
 		}
-		
-		if(f>2.5&&f<=4) {
+		else if(pe==2.5) {
 			lowV=0;
-			medV=(float) ((4-f)/(4-2.5));
-			if(f!=4)
+			medV=1;
+			highV=0;
+			med=true;
+		}
+		else if(pe>2.5&&pe<=4) {
+			lowV=0;
+			medV=(float) ((4-pe)/(4-2.5));
+			if(pe!=4)
 			med=true;
 			
-			highV=(float) ((f-2.5)/(4-2.5));
+			highV=(float) ((pe-2.5)/(4-2.5));
+			high=true;
+		}
+		else if(pe>4) {
+			lowV=0;
+			medV=0;
+			highV=1;
 			high=true;
 		}
 	}
