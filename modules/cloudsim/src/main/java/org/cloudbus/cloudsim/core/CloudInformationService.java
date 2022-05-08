@@ -74,6 +74,7 @@ public class CloudInformationService extends SimEntity {
          */
 	@Override
 	public void startEntity() {
+		
 	}
 
 	@Override

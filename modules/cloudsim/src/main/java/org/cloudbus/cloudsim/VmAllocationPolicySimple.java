@@ -67,6 +67,12 @@ public class VmAllocationPolicySimple extends VmAllocationPolicy {
 	 */
 	@Override
 	public boolean allocateHostForVm(Vm vm) {
+		System.out.println("vm requested Mips are "+vm.getMips());
+		System.out.println("vm requested ram is "+vm.getRam());
+//		System.out.println("vm requested BW is "+vm.getBw());
+//		System.out.println("vm requested size is "+vm.getSize());
+		System.out.println("vm requested Pes are "+vm.getNumberOfPes());
+		System.out.println("");
 		int requiredPes = vm.getNumberOfPes();
 		boolean result = false;
 		int tries = 0;
@@ -75,7 +81,6 @@ public class VmAllocationPolicySimple extends VmAllocationPolicy {
 			System.out.println("freePes "+freePes);
 			freePesTmp.add(freePes);
 		}
-
 		if (!getVmTable().containsKey(vm.getUid())) { // if this vm was not created
 			do {// we still trying until we find a host or until we try all of them
 				int moreFree = Integer.MIN_VALUE;
@@ -90,6 +95,11 @@ public class VmAllocationPolicySimple extends VmAllocationPolicy {
 				}
 
 				Host host = getHostList().get(idx);
+				System.out.print("Selected Host is "+getHostList().get(idx).getId()+" with ");
+				System.out.print(" Mips: "+getHostList().get(idx).getAvailableMips());
+				System.out.print(" PE: "+freePesTmp.get(idx));
+				System.out.print(" RAM: "+getHostList().get(idx).getRamProvisioner().getAvailableRam());
+				System.out.println("");
 				result = host.vmCreate(vm);
 
 				if (result) { // if vm were succesfully created in the host

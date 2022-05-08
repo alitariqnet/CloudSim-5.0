@@ -99,6 +99,7 @@ public class VmAllocationPolicyFuzzy extends VmAllocationPolicy {
 		int tries = 0;
 		List<Integer> freePesTmp = new ArrayList<Integer>();
 		for (Integer freePes : getFreePes()) {
+			System.out.println("freePes "+freePes);
 			freePesTmp.add(freePes);
 		}
 //		getPriority();
@@ -138,7 +139,7 @@ public class VmAllocationPolicyFuzzy extends VmAllocationPolicy {
 					if(getHostList().get(i).getRamProvisioner().getAvailableRam()>=512 && getHostList().get(i).getAvailableMips() >=250 && freePesTmp.get(i)>=1)
 						limitsCheck = true;
 					if (limitsCheck && getHostList().get(i).getPriority() > maxPriority && idx!=getHostList().get(i).getId()) {
-						System.out.println("index: "+idx+" host id: "+getHostList().get(i).getId());
+						System.out.println("index: "+idx+"selected host id: "+getHostList().get(i).getId());
 						maxPriority = getHostList().get(i).getPriority();
 						idx = i;
 //						System.out.println("Index is now "+idx);

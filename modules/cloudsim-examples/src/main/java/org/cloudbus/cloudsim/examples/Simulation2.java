@@ -47,6 +47,7 @@ import org.cloudbus.cloudsim.provisioners.RamProvisionerSimple;
  * complete the execution.
  * 
  * This is the edited version of CloudSimExample2
+ * This is using Fuzzy logic algorithm for VM allocation policy
  */
 public class Simulation2 {
 
@@ -62,13 +63,14 @@ public class Simulation2 {
 	 */
 	public static void main(String[] args) {
 
-		Log.printLine("Starting CloudSimExample2...");
+		Log.printLine("Starting Simulation2...");
 
 	        try {
 	        	// First step: Initialize the CloudSim package. It should be called
 	            	// before creating any entities.
 	            	int num_user = 1;   // number of cloud users
 	            	Calendar calendar = Calendar.getInstance();
+//	            	System.out.println(calendar.toString());
 	            	boolean trace_flag = false;  // mean trace events
 
 	            	// Initialize the CloudSim library
@@ -159,7 +161,7 @@ public class Simulation2 {
 	            	
 	            	printCloudletList(newList);
 
-	            	Log.printLine("CloudSimExample2 finished!");
+	            	Log.printLine("Simulation2 finished!");
 	        }
 	        catch (Exception e) {
 	            e.printStackTrace();
@@ -179,7 +181,7 @@ public class Simulation2 {
 		    int bw = 10000;
 	        // 2. A Machine contains one or more PEs or CPUs/Cores.
 	    	// In this example, it will have only one core.
-	    	for(int i=0;i<10;i++) {
+	    	for(int i=0;i<100;i++) {
 	    	List<Pe> peList = new ArrayList<Pe>();
 
 	    	
