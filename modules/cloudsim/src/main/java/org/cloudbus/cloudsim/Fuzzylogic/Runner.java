@@ -8,11 +8,11 @@ public class Runner {
 	@SuppressWarnings({ "null", "static-access" })
 	public static void main(String[] args) {
 		System.out.println("Testing...");
-		FuzzyInferenceSystem fis = new FuzzyInferenceSystem();
+		FuzzyLogicSystem fls = new FuzzyLogicSystem();
 //		fis.fuzz.ram.init(512);
 //		fis.fuzz.mips.init(250);
 //		fis.fuzz.pe.init(1);
-		test(fis);
+		test(fls);
 //		fis.initFISRules(fis.defuzz.output);
 		
 //		System.out.println(fis.defuzz.output.toString());
@@ -20,7 +20,7 @@ public class Runner {
 		
 	}
 
-	public static void test(FuzzyInferenceSystem fis) {
+	public static void test(FuzzyLogicSystem fls) {
 		int []ram = {512,1024,1536,2048};
 		int []pe = {1,2,3,4};
 		int []mips = {250,500,750,1000};
@@ -28,18 +28,18 @@ public class Runner {
 			for (int j = 0; j < pe.length; j++) {
 				for (int k = 0; k < mips.length; k++) {
 					
-					fis.fuzz.ram.init(ram[i]);
-					fis.fuzz.mips.init(mips[j]);
-					fis.fuzz.pe.init(pe[k]);
+					fls.fuzz.ram.init(ram[i]);
+					fls.fuzz.mips.init(mips[j]);
+					fls.fuzz.pe.init(pe[k]);
 					
-					fis.initFISRules(fis.defuzz);
+					fls.fis.initFISRules(fls.fuzz, fls.defuzz);
 					
-					System.out.println("ram: "+ram[i]+" mips: "+mips[j]+" pe: "+pe[k]+" crisp value: "+fis.defuzz.defuzzification());
+					System.out.println("ram: "+ram[i]+" mips: "+mips[j]+" pe: "+pe[k]+" crisp value: "+fls.defuzz.defuzzification());
 					
-					fis.fuzz.ram.reset();
-					fis.fuzz.mips.reset();
-					fis.fuzz.pe.reset();
-					fis.defuzz.reset();
+					fls.fuzz.ram.reset();
+					fls.fuzz.mips.reset();
+					fls.fuzz.pe.reset();
+					fls.defuzz.reset();
 				}
 			}
 		}
