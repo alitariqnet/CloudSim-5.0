@@ -73,12 +73,14 @@ public class VmAllocationPolicySimple extends VmAllocationPolicy {
 //		System.out.println("vm requested size is "+vm.getSize());
 		System.out.println("vm requested Pes are "+vm.getNumberOfPes());
 		System.out.println("");
+		long timeStart= System.nanoTime();
+    	System.out.println(timeStart);
 		int requiredPes = vm.getNumberOfPes();
 		boolean result = false;
 		int tries = 0;
 		List<Integer> freePesTmp = new ArrayList<Integer>();
 		for (Integer freePes : getFreePes()) {
-			System.out.println("freePes "+freePes);
+//			System.out.println("freePes "+freePes);
 			freePesTmp.add(freePes);
 		}
 		if (!getVmTable().containsKey(vm.getUid())) { // if this vm was not created
@@ -115,7 +117,9 @@ public class VmAllocationPolicySimple extends VmAllocationPolicy {
 			} while (!result && tries < getFreePes().size());
 
 		}
-
+		long timeEnd= System.nanoTime();
+    	System.out.println(timeEnd);
+    	System.out.println("Simulation took time "+ (timeEnd - timeStart)+" nanoseconds");
 		return result;
 	}
 

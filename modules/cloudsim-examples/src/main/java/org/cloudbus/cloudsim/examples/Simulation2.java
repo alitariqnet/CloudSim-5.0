@@ -145,8 +145,8 @@ public class Simulation2 {
 //	            	}
 	            	// Sixth step: Starts the simulation
 	            	
-	            	long timeStart= System.nanoTime();
-	            	System.out.println(timeStart);
+//	            	long timeStart= System.nanoTime();
+//	            	System.out.println(timeStart);
 	            	
 	            	CloudSim.startSimulation();
 	            	
@@ -155,9 +155,9 @@ public class Simulation2 {
 
 	            	CloudSim.stopSimulation();
 	            	
-	            	long timeEnd= System.nanoTime();
-	            	System.out.println(timeEnd);
-	            	System.out.println("Simulation took time "+ (timeEnd - timeStart)/1000000+" milliseconds");
+//	            	long timeEnd= System.nanoTime();
+//	            	System.out.println(timeEnd);
+//	            	System.out.println("Simulation took time "+ (timeEnd - timeStart)/1000000+" milliseconds");
 	            	
 	            	printCloudletList(newList);
 
@@ -181,7 +181,7 @@ public class Simulation2 {
 		    int bw = 10000;
 	        // 2. A Machine contains one or more PEs or CPUs/Cores.
 	    	// In this example, it will have only one core.
-	    	for(int i=0;i<100;i++) {
+	    	for(int i=0;i<10;i++) {
 	    	List<Pe> peList = new ArrayList<Pe>();
 
 	    	
@@ -189,10 +189,10 @@ public class Simulation2 {
 	        // 3. Create PEs and add these into a list.
 	    	peList.add(new Pe(0, new PeProvisionerSimple(mips))); // need to store Pe id and MIPS Rating
 	    	peList.add(new Pe(1, new PeProvisionerSimple(mips)));
-	    	if(i%2==0) {
+//	    	if(i%2==0) {
 	    	peList.add(new Pe(2, new PeProvisionerSimple(mips)));
 	    	peList.add(new Pe(3, new PeProvisionerSimple(mips)));
-	    	}
+//	    	}
 	    	
 	        //4. Create Host with its id and list of PEs and add them to the list of machines
 	        //int hostId=0;
