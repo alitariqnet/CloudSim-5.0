@@ -90,7 +90,7 @@ public class Simulation2 {
 
 	            	//VM description
 	            	int vmid = 0;
-	            	int mips = 250;
+	            	int mips = 150;
 	            	long size = 10000; //image size (MB)
 	            	int ram = 512; //vm memory (MB)
 	            	long bw = 1000;
@@ -175,7 +175,7 @@ public class Simulation2 {
 	        // 1. We need to create a list to store
 	    	//    our machine
 	    	List<Host> hostList = new ArrayList<Host>();
-	    	int mips = 250;
+	    	int mips = 500;
 	    	int ram = 2048; //host memory (MB)
 		    long storage = 100000; //host storage
 		    int bw = 10000;

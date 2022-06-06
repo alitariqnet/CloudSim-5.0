@@ -140,7 +140,7 @@ public class VmAllocationPolicyFuzzy extends VmAllocationPolicy {
 						limitsCheck = true;
 					
 					if (limitsCheck && getHostList().get(i).getPriority() > maxPriority && idx!=getHostList().get(i).getId()) {
-						System.out.println("index: "+idx+"selected host id: "+getHostList().get(i).getId());
+//						System.out.println("index: "+idx+"selected host id: "+getHostList().get(i).getId());
 						maxPriority = getHostList().get(i).getPriority();
 						idx = i;
 //						System.out.println("Index is now "+idx);
@@ -154,8 +154,8 @@ public class VmAllocationPolicyFuzzy extends VmAllocationPolicy {
 					}
 				}
 				
-				System.out.println("index is now: "+idx);
-				System.out.println("");
+//				System.out.println("index is now: "+idx);
+//				System.out.println("");
 				Host host = getHostList().get(idx);
 				result = host.vmCreate(vm);
 

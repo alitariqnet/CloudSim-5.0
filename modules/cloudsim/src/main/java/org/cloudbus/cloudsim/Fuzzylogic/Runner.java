@@ -24,24 +24,22 @@ public class Runner {
 		int []ram = {512,1024,1536,2048};
 		int []pe = {1,2,3,4};
 		int []mips = {250,500,750,1000};
-		for (int i = 0; i < ram.length; i++) {
-			for (int j = 0; j < pe.length; j++) {
-				for (int k = 0; k < mips.length; k++) {
+//		for (int i = 0; i < ram.length; i++) {
+//			for (int j = 0; j < pe.length; j++) {
+//				for (int k = 0; k < mips.length; k++) {
 					
-					fls.fuzz.ram.init(ram[i]);
-					fls.fuzz.mips.init(mips[j]);
-					fls.fuzz.pe.init(pe[k]);
+					fls.fuzz.ram.init(1024);
+					fls.fuzz.mips.init(750);
+					fls.fuzz.pe.init(3);
 					
 					fls.fis.initFISRules(fls.fuzz, fls.defuzz);
 					
-					System.out.println("ram: "+ram[i]+" mips: "+mips[j]+" pe: "+pe[k]+" crisp value: "+fls.defuzz.defuzzification());
-					
+//					System.out.println("ram: "+ram[i]+" mips: "+mips[j]+" pe: "+pe[k]+" crisp value: "+fls.defuzz.defuzzification());
+					System.out.println(fls.defuzz.defuzzification());
 					fls.fuzz.ram.reset();
 					fls.fuzz.mips.reset();
 					fls.fuzz.pe.reset();
 					fls.defuzz.reset();
 				}
 			}
-		}
-	}
-}
+		

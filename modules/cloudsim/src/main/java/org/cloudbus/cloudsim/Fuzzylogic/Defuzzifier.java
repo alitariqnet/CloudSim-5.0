@@ -80,11 +80,11 @@ public class Defuzzifier {
 	}
 	
 	public float defuzzification() {
-//		System.out.println(toString());
+		System.out.println("lowV: "+lowV+" medV: "+medV+" highV: "+highV);
 		float f = ((0+1+2)*lowV)+((3+4+5+6+7)*medV)+((8+9+10)*highV);
-//		System.out.println(f);
+		System.out.println("f: "+f);
 		float l = ((lowV*3)+(medV*5)+(highV*3));
-//		System.out.println(l);
+		System.out.println("l: "+l);
 //		crisp = (float) f/l;
 //		System.out.println(crisp);
 //		return crisp/10;
