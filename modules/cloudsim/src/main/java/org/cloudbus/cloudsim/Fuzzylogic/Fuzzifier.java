@@ -2,8 +2,8 @@ package org.cloudbus.cloudsim.Fuzzylogic;
 
 public class Fuzzifier {
 	// input parameters
-	public RAM ram = new RAM();
-	public PE pe = new PE();
-	public MIPS mips = new MIPS();
+	public Ram ram = new Ram();
+	public Pe pe = new Pe();
+	public Storage storage = new Storage();
 	
 }

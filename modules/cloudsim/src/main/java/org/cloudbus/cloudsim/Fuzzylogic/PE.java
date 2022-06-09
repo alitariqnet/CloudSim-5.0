@@ -1,78 +1,55 @@
 package org.cloudbus.cloudsim.Fuzzylogic;
 
-public class PE {
+public class Pe {
+	
 	// use these in forming rules
-		boolean low = false;
-		boolean med = false;
-		boolean high = false;
-		
-		// use these to get the calculated values
-		float lowV ;
-		float medV;
-		float highV;
-		
-		public boolean isLow() {
-			return low;
-		}
-		
-		public void setLow(boolean low) {
-			this.low = low;
-		}
-		
-		public boolean isMed() {
-			return med;
-		}
-		
-		public void setMed(boolean med) {
-			this.med = med;
-		}
-		
-		public boolean isHigh() {
-			return high;
-		}
-		
-		public void setHigh(boolean high) {
-			this.high = high;
-		}
+	boolean isLowPe = false;
+	boolean isMedPe = false;
+	boolean isHighPe = false;
+	
+	// use these to get the calculated values
+	float lowPe ;
+	float medPe;
+	float highPe;
 		
 	// calculate the membership function values
 	public void init(float pe) {
 		
 		if(pe<1) {
-			low=true;
-			lowV=1;
-			medV=0;
-			highV=0;
+			isLowPe=true;
+			lowPe=1;
+			medPe=0;
+			highPe=0;
 		}
 		else if(pe>=1&&pe<2.5) {
-			lowV=(float) ((2.5-pe)/(2.5-1));
-			low=true;
+			lowPe=(float) ((2.5-pe)/(2.5-1));
+			isLowPe=true;
 			
-			medV=(float) ((pe-1)/(2.5-1));
+			medPe=(float) ((pe-1)/(2.5-1));
 			if(pe!=1)
-			med=true;
-			highV=0;
+			isMedPe=true;
+			highPe=0;
 		}
 		else if(pe==2.5) {
-			lowV=0;
-			medV=1;
-			highV=0;
-			med=true;
+			lowPe=0;
+			medPe=1;
+			highPe=0;
+			isMedPe=true;
 		}
 		else if(pe>2.5&&pe<=4) {
-			lowV=0;
-			medV=(float) ((4-pe)/(4-2.5));
+			lowPe=0;
+			medPe=(float) ((4-pe)/(4-2.5));
 			if(pe!=4)
-			med=true;
+			isMedPe=true;
 			
-			highV=(float) ((pe-2.5)/(4-2.5));
-			high=true;
+			highPe=(float) ((pe-2.5)/(4-2.5));
+			isHighPe=true;
 		}
 		else if(pe>4) {
-			lowV=0;
-			medV=0;
-			highV=1;
-			high=true;
+			lowPe=0;
+			medPe=0;
+			highPe=1;
+			isHighPe=true;
 		}
 	}
 	
@@ -91,16 +68,16 @@ public class PE {
 	
 	@Override
 	public String toString() {
-		return "PE [low=" + low + ", med=" + med + ", high=" + high + ", lowV=" + lowV + ", medV=" + medV
-				+ ", highV=" + highV + "]";
+		return "PE [low=" + isLowPe + ", med=" + isMedPe + ", high=" + isHighPe + ", lowV=" + lowPe + ", medV=" + medPe
+				+ ", highV=" + highPe + "]";
 	}
 	
 	void reset() {
-		this.high=false;
-		this.med=false;
-		this.low=false;
-		this.highV=0.0f;
-		this.medV=0.0f;
-		this.lowV=0.0f;
+		this.isHighPe=false;
+		this.isMedPe=false;
+		this.isLowPe=false;
+		this.highPe=0.0f;
+		this.medPe=0.0f;
+		this.lowPe=0.0f;
 	}
 }

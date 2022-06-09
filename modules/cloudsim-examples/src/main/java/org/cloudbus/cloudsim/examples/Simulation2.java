@@ -30,6 +30,7 @@ import org.cloudbus.cloudsim.UtilizationModel;
 import org.cloudbus.cloudsim.UtilizationModelFull;
 import org.cloudbus.cloudsim.Vm;
 import org.cloudbus.cloudsim.VmAllocationPolicyFuzzy;
+import org.cloudbus.cloudsim.VmAllocationPolicyFuzzy2;
 import org.cloudbus.cloudsim.VmAllocationPolicySimple;
 import org.cloudbus.cloudsim.VmSchedulerTimeShared;
 import org.cloudbus.cloudsim.core.CloudSim;
@@ -90,15 +91,18 @@ public class Simulation2 {
 
 	            	//VM description
 	            	int vmid = 0;
-	            	int mips = 150;
+	            	int mips = 250;
 	            	long size = 10000; //image size (MB)
 	            	int ram = 512; //vm memory (MB)
 	            	long bw = 1000;
 	            	int pesNumber = 1; //number of cpus
 	            	String vmm = "Xen"; //VMM name
 	            	
-	            	for (int i = 0; i < 40; i++) {
-					
+	            	for (int i = 0; i < 30; i++) {
+					if(i%2==0)
+						size=20000;
+					else if(i%3==0)
+						size=25000;
 	            	//create two VMs
 //	            	vm[i] = new Vm(i, brokerId, mips, pesNumber, ram, bw, size, vmm, new CloudletSchedulerTimeShared());
 
@@ -117,12 +121,12 @@ public class Simulation2 {
 
 	            	//Cloudlet properties
 	            	int id = 0;
-	            	pesNumber = 2;
+	            	pesNumber = 1;
 	            	long length = 250000;
 	            	long fileSize = 300;
 	            	long outputSize = 300;
 	            	UtilizationModel utilizationModel = new UtilizationModelFull();
-	            	for (int i = 0; i < 80; i++) {
+	            	for (int i = 0; i < 40; i++) {
 	            	cloudlet = new Cloudlet(i, length, pesNumber, fileSize, outputSize, utilizationModel, utilizationModel, utilizationModel);
 	            	cloudlet.setUserId(brokerId);
 
@@ -175,7 +179,7 @@ public class Simulation2 {
 	        // 1. We need to create a list to store
 	    	//    our machine
 	    	List<Host> hostList = new ArrayList<Host>();
-	    	int mips = 500;
+	    	int mips = 250;
 	    	int ram = 2048; //host memory (MB)
 		    long storage = 100000; //host storage
 		    int bw = 10000;
@@ -184,15 +188,14 @@ public class Simulation2 {
 	    	for(int i=0;i<10;i++) {
 	    	List<Pe> peList = new ArrayList<Pe>();
 
-	    	
-
 	        // 3. Create PEs and add these into a list.
 	    	peList.add(new Pe(0, new PeProvisionerSimple(mips))); // need to store Pe id and MIPS Rating
 	    	peList.add(new Pe(1, new PeProvisionerSimple(mips)));
-//	    	if(i%2==0) {
+	    	// when i is even, create quad core machine else when i is odd, create dual core machine
+	    	if(i%2==0) {
 	    	peList.add(new Pe(2, new PeProvisionerSimple(mips)));
 	    	peList.add(new Pe(3, new PeProvisionerSimple(mips)));
-//	    	}
+	    	}
 	    	
 	        //4. Create Host with its id and list of PEs and add them to the list of machines
 	        //int hostId=0;

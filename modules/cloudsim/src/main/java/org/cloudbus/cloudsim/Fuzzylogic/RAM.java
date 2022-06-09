@@ -1,79 +1,56 @@
 package org.cloudbus.cloudsim.Fuzzylogic;
 
-public class RAM {
+public class Ram {
+	
 	// use these in forming rules
-		boolean low = false;
-		boolean med = false;
-		boolean high = false;
-		
-		// use these to get the calculated values
-		float lowV;
-		float medV;
-		float highV;
-		
-		public boolean isLow() {
-			return low;
-		}
-		
-		public void setLow(boolean low) {
-			this.low = low;
-		}
-		
-		public boolean isMed() {
-			return med;
-		}
-		
-		public void setMed(boolean med) {
-			this.med = med;
-		}
-		
-		public boolean isHigh() {
-			return high;
-		}
-		
-		public void setHigh(boolean high) {
-			this.high = high;
-		}
+	boolean isLowRam = false;
+	boolean isMedRam = false;
+	boolean isHighRam = false;
+	
+	// use these to get the calculated values
+	float lowRam;
+	float medRam;
+	float highRam;
 		
 	// calculate the membership function values
 	public void init(float ram) {
 		if(ram<512) {
-			lowV=1;
-			low=true;
-			medV=0;
-			highV=0;
+			lowRam=1;
+			isLowRam=true;
+			medRam=0;
+			highRam=0;
 		}
 		else if(ram>=512&&ram<1280) {
-			lowV=(1280-ram)/(1280-512);
-			low=true;
+			lowRam=(1280-ram)/(1280-512);
+			isLowRam=true;
 
-			medV=(ram-512)/(1280-512);
+			medRam=(ram-512)/(1280-512);
 			if(ram!=512)
-			med=true;
+			isMedRam=true;
 			
-			highV=0;
+			highRam=0;
 		}
 		else if(ram==1280) {
-			lowV=0;
-			medV=1;
-			med=true;
-			highV=0;
+			lowRam=0;
+			medRam=1;
+			isMedRam=true;
+			highRam=0;
 		}
 		else if(ram>1280&&ram<=2048) {
-			lowV=0;
+			lowRam=0;
 			
-			medV=(2048-ram)/(2048-1280);
+			medRam=(2048-ram)/(2048-1280);
 			if(ram!=2048)
-			med=true;
+			isMedRam=true;
 			
-			highV=(ram-1280)/(2048-1280);
-			high=true;
+			highRam=(ram-1280)/(2048-1280);
+			isHighRam=true;
 		}
 		else if(ram>2048) {
-			lowV=0;
-			medV=0;
-			highV=1;
-			high=true;
+			lowRam=0;
+			medRam=0;
+			highRam=1;
+			isHighRam=true;
 		}
 	}
 
@@ -90,18 +67,12 @@ public class RAM {
 	//  	0|/______\/______\____________
 	//	  	  512   1280    2048
 	
-	@Override
-	public String toString() {
-		return "RAM [low=" + low + ", med=" + med + ", high=" + high + ", lowV=" + lowV + ", medV=" + medV
-				+ ", highV=" + highV + "]";
-	}
-	
 	void reset() {
-		this.high=false;
-		this.med=false;
-		this.low=false;
-		this.highV=0.0f;
-		this.medV=0.0f;
-		this.lowV=0.0f;
+		this.isHighRam=false;
+		this.isMedRam=false;
+		this.isLowRam=false;
+		this.highRam=0.0f;
+		this.medRam=0.0f;
+		this.lowRam=0.0f;
 	}
 }

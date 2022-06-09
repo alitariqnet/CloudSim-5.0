@@ -29,7 +29,7 @@ public class Runner {
 //				for (int k = 0; k < mips.length; k++) {
 					
 					fls.fuzz.ram.init(1024);
-					fls.fuzz.mips.init(750);
+					fls.fuzz.storage.init(750);
 					fls.fuzz.pe.init(3);
 					
 					fls.fis.initFISRules(fls.fuzz, fls.defuzz);
@@ -37,7 +37,7 @@ public class Runner {
 //					System.out.println("ram: "+ram[i]+" mips: "+mips[j]+" pe: "+pe[k]+" crisp value: "+fls.defuzz.defuzzification());
 					System.out.println(fls.defuzz.defuzzification());
 					fls.fuzz.ram.reset();
-					fls.fuzz.mips.reset();
+					fls.fuzz.storage.reset();
 					fls.fuzz.pe.reset();
 					fls.defuzz.reset();
 				}

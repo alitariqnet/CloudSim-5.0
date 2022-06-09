@@ -117,12 +117,16 @@ public class VmAllocationPolicyFuzzy extends VmAllocationPolicy {
 					fls = new FuzzyLogicSystem();
 //					fis = new FuzzyInferenceSystem();
 					fls.fuzz.ram.init(host.getRamProvisioner().getAvailableRam());
-					fls.fuzz.mips.init((float)host.getAvailableMips());
+					fls.fuzz.storage.init((float)host.getStorage());
 					fls.fuzz.pe.init(freePesTmp.get(counter));
 					
 					fls.fis.initFISRules(fls.fuzz, fls.defuzz);
 					crisp = fls.defuzz.defuzzification();
-					
+					System.out.println(counter+": crisp: "+crisp);
+					System.out.print("host Storage: "+host.getStorage());
+					System.out.print(" PE: "+freePesTmp.get(counter));
+					System.out.print(" RAM: "+host.getRamProvisioner().getAvailableRam());
+					System.out.println(" ");
 //					System.out.println("Host: "+(counter)+"--> RAM: "+host.getRamProvisioner().getAvailableRam()+" MIPS: "+host.getAvailableMips()+" PE: "+freePesTmp.get(counter) +" crisp value: "+crisp);
 					host.setPriority(crisp);
 					counter++;
@@ -144,16 +148,17 @@ public class VmAllocationPolicyFuzzy extends VmAllocationPolicy {
 						maxPriority = getHostList().get(i).getPriority();
 						idx = i;
 //						System.out.println("Index is now "+idx);
-						System.out.println("Host: "+i+" host priority: "+getHostList().get(i).getPriority()+" max priority: "+maxPriority);
-						System.out.print("Selected Host is "+getHostList().get(i).getId()+" with ");
-						System.out.print(" Mips: "+getHostList().get(i).getAvailableMips());
-						System.out.print(" PE: "+freePesTmp.get(i));
-						System.out.print(" RAM: "+getHostList().get(i).getRamProvisioner().getAvailableRam());
-						System.out.println("");
+//						System.out.println("Host: "+i+" host priority: "+getHostList().get(i).getPriority()+" max priority: "+maxPriority);
+						
+						
 						limitsCheck = false;
 					}
 				}
-				
+				System.out.print("Selected Host is "+getHostList().get(idx).getId()+" with ");
+				System.out.print(" Storage: "+getHostList().get(idx).getStorage());
+				System.out.print(" PE: "+freePesTmp.get(idx));
+				System.out.print(" RAM: "+getHostList().get(idx).getRamProvisioner().getAvailableRam());
+				System.out.println("");
 //				System.out.println("index is now: "+idx);
 //				System.out.println("");
 				Host host = getHostList().get(idx);
