@@ -36,6 +36,7 @@ public class FuzzyInferenceSystem {
 			defuzz.temp = AND(AND(fuzz.ram.lowRam,fuzz.storage.medStorage),fuzz.pe.lowPe);
 			if(defuzz.temp<defuzz.lowDefuzz)
 				defuzz.lowDefuzz = defuzz.temp;
+			System.out.println("inside 4 "+fuzz.ram.lowRam+" "+fuzz.storage.medStorage+" "+fuzz.pe.lowPe);
 			System.out.println("inside 4 defuzz.lowV "+defuzz.lowDefuzz);
 		}
 		
@@ -45,6 +46,7 @@ public class FuzzyInferenceSystem {
 			if(defuzz.temp<defuzz.lowDefuzz)
 				defuzz.lowDefuzz = defuzz.temp;
 			System.out.println("inside 5 defuzz.lowV "+defuzz.lowDefuzz);
+			System.out.println("inside 5 "+fuzz.ram.lowRam+" "+fuzz.storage.medStorage+" "+fuzz.pe.medPe);
 		}
 		
 		if(fuzz.ram.isLowRam==true && fuzz.storage.isMedStorage==true && fuzz.pe.isHighPe==true) {

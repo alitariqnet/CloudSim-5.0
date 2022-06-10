@@ -14,35 +14,38 @@ public class Storage {
 		
 	// calculate the membership function values
 	public void init(float storage) {
-		if(storage<25000) {
+		System.out.println("storage: "+storage);
+		if(storage<10000) {
 			lowStorage=1;
 			isLowStorage=true;
 			medStorage=0;
 			highStorage=0;
 		}
-		else if(storage>=25000&&storage<62500) {
-			lowStorage=(62500-storage)/(62500-25000);
+		else if(storage>=10000&&storage<55000) {
+			lowStorage=(55000-storage)/(55000-10000);
 			isLowStorage=true;
-			
-			medStorage=(storage-25000)/(625-25000);
-			if(storage!=25000)
+			System.out.println("lowStorage: "+lowStorage);
+			medStorage=(storage-10000)/(55000-10000);
+			System.out.println("medStorage: "+medStorage);
+			if(storage!=10000)
 				isMedStorage=true;
 			highStorage=0;
 		}
-		else if(storage==62500) {
+		else if(storage==55000) {
 			lowStorage=0;
 			medStorage=1;
 			isMedStorage=true;
 			highStorage=0;
 		}
-		else if(storage>62500&&storage<=100000) {
+		else if(storage>55000&&storage<=100000) {
 			lowStorage=0;
-			medStorage=(100000-storage)/(100000-62500);
+			medStorage=(100000-storage)/(100000-55000);
 			if(storage!=100000)
 			isMedStorage=true;
-			
-			highStorage=(storage-62500)/(100000-62500);
+			System.out.println("medStorage: "+medStorage);
+			highStorage=(storage-55000)/(100000-55000);
 			isHighStorage=true;
+			System.out.println("highStorage: "+highStorage);
 		}
 		else if(storage>100000) {
 			lowStorage=0;
@@ -63,7 +66,7 @@ public class Storage {
 	//	 	 |  /  \    /  \
 	//   	 | /    \  /    \
 	//  	0|/______\/______\____________
-	//	  	 25000  62500   100000
+	//	  	 10000  55000   100000
 	
 	public void reset() {
 		this.isHighStorage=false;

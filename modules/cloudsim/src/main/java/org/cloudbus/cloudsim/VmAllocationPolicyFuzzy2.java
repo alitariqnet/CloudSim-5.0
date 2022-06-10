@@ -264,7 +264,7 @@ public class VmAllocationPolicyFuzzy2 extends VmAllocationPolicy {
 		float medStorage;
 		float highStorage;
 			
-		// calculate the membership function values
+		// calculate the membership function values for Storage
 		public void initSTORAGE(float storage) {
 			if(storage<25000) {
 				lowStorage=1;
@@ -338,7 +338,7 @@ public class VmAllocationPolicyFuzzy2 extends VmAllocationPolicy {
 		float highRAM;
 			
 			
-		// calculate the membership function values
+		// calculate the membership function values for Random Access Memory
 		public void initRAM(float ram) {
 			if(ram<512) {
 				lowRAM=1;
@@ -412,7 +412,7 @@ public class VmAllocationPolicyFuzzy2 extends VmAllocationPolicy {
 		float medPE;
 		float highPE;
 			
-		// calculate the membership function values
+		// calculate the membership function values for Processing Element
 		public void initPE(float pe) {
 			
 			if(pe<1) {
@@ -474,7 +474,7 @@ public class VmAllocationPolicyFuzzy2 extends VmAllocationPolicy {
 			this.medPE=0.0f;
 			this.lowPE=0.0f;
 		}
-		
+		// aggregate the output
 		public void initFISRules() {
 			
 			// for first low
@@ -741,12 +741,14 @@ public class VmAllocationPolicyFuzzy2 extends VmAllocationPolicy {
 		}
 		
 		public double defuzzification() {
+			
 			double f = 0;
 			double a = 0,b,c,e,g,h,l;
 			
 			System.out.println("");
 			System.out.println("lowDefuzz: "+ lowDefuzz + " medDefuzz:"+medDefuzz+" highDefuzz:"+highDefuzz);
 			
+			// calculate for low membership function in defuzzification
 			if (lowDefuzz>=0.75) {
 				a = ((1*0.75)+(2*0.5)+(3*0.25));
 				e = 0.75+0.5+0.25;
@@ -767,7 +769,8 @@ public class VmAllocationPolicyFuzzy2 extends VmAllocationPolicy {
 				e = lowDefuzz+lowDefuzz+lowDefuzz;
 				System.out.println("lowDefuzz<0.25");
 			}
-				
+			
+			// calculate for medium membership function in defuzzification
 			if(medDefuzz>=0.75) {
 				b = (((2*0.25)+(3*0.5)+(4*0.75)+(5*medDefuzz)+(6*0.75)+(7*0.5)+(8*0.25)));
 				g = 0.25+0.5+0.75+medDefuzz+0.75+0.5+0.25;
@@ -789,6 +792,7 @@ public class VmAllocationPolicyFuzzy2 extends VmAllocationPolicy {
 				System.out.println("medDefuzz<0.25");
 			}
 			
+			// calculate for high membership function in defuzzification
 			if(highDefuzz>=0.75) {
 				c = (((7*0.25)+(8*0.5)+(9*0.75)+(10*highDefuzz)));
 				h = 0.25+0.5+0.75+highDefuzz;
@@ -814,8 +818,20 @@ public class VmAllocationPolicyFuzzy2 extends VmAllocationPolicy {
 			System.out.println("a: "+a+" b: "+b+" c: "+c+" f: "+f);
 			l = e+g+h;
 			System.out.println("e: "+e+" g: "+g+" h: "+h+" l: "+l);
-//			crisp = (float) f/l;
-//			return crisp/10;
 			return f/l;
 		}
+		
+		// Above method formulates the function below
+		
+		//		1|low    med    high
+		//		 |\      /\      /
+		//	     | \    /  \    /
+		//		 |	\  /    \  /
+		//	  0.5|	 \/      \/
+		//	 	 |	 /\      /\
+		//	 	 |  /  \    /  \
+		//   	 | /    \  /    \
+		//  	0|/______\/______\____________
+		//	  	  1     4  6     9
+		
 }
