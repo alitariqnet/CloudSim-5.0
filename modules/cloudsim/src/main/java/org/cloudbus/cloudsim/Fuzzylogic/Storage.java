@@ -65,7 +65,7 @@ public class Storage {
 	//  	0|/______\/______\____________
 	//	  	 25000  62500   100000
 	
-	void reset() {
+	public void reset() {
 		this.isHighStorage=false;
 		this.isMedStorage=false;
 		this.isLowStorage=false;

@@ -26,8 +26,8 @@ import org.cloudbus.cloudsim.core.CloudSim;
  */
 public class VmAllocationPolicyFuzzy extends VmAllocationPolicy {
 	
-	private float maxPriority;
-	private float crisp;
+	private double maxPriority;
+	private double crisp;
 	int idx = -1;
 	/** The map between each VM and its allocated host.
          * The map key is a VM UID and the value is the allocated host for that VM. */
@@ -89,14 +89,14 @@ public class VmAllocationPolicyFuzzy extends VmAllocationPolicy {
 	 */
 	@Override
 	public boolean allocateHostForVm(Vm vm) {
-		System.out.println("vm requested Mips are "+vm.getMips());
-		System.out.println("vm requested ram is "+vm.getRam());
+//		System.out.print("vm requested Mips are "+vm.getMips());
+		System.out.print(" vm requested and ram is "+vm.getRam());
 //		System.out.println("vm requested BW is "+vm.getBw());
-//		System.out.println("vm requested size is "+vm.getSize());
-		System.out.println("vm requested Pes are "+vm.getNumberOfPes());
+		System.out.print(" size is "+vm.getSize());
+		System.out.println(" and Pes are "+vm.getNumberOfPes());
 		System.out.println("");
 		long timeStart= System.nanoTime();
-    	System.out.println(timeStart);
+//    	System.out.println(timeStart);
 		int requiredPes = vm.getNumberOfPes();
 		boolean result = false;
 		int tries = 0;
@@ -122,14 +122,18 @@ public class VmAllocationPolicyFuzzy extends VmAllocationPolicy {
 					
 					fls.fis.initFISRules(fls.fuzz, fls.defuzz);
 					crisp = fls.defuzz.defuzzification();
-					System.out.println(counter+": crisp: "+crisp);
-					System.out.print("host Storage: "+host.getStorage());
+					System.out.print(counter+": crisp: "+crisp);
+					System.out.print(" -- host Storage: "+host.getStorage());
 					System.out.print(" PE: "+freePesTmp.get(counter));
 					System.out.print(" RAM: "+host.getRamProvisioner().getAvailableRam());
-					System.out.println(" ");
+					System.out.println("");
 //					System.out.println("Host: "+(counter)+"--> RAM: "+host.getRamProvisioner().getAvailableRam()+" MIPS: "+host.getAvailableMips()+" PE: "+freePesTmp.get(counter) +" crisp value: "+crisp);
 					host.setPriority(crisp);
 					counter++;
+					fls.fuzz.ram.reset();
+					fls.fuzz.storage.reset();
+					fls.fuzz.pe.reset();
+					fls.defuzz.reset();
 				}
 				
 				for (int i = 0; i < getHostList().size(); i++) {
@@ -154,6 +158,7 @@ public class VmAllocationPolicyFuzzy extends VmAllocationPolicy {
 						limitsCheck = false;
 					}
 				}
+				System.out.println("");
 				System.out.print("Selected Host is "+getHostList().get(idx).getId()+" with ");
 				System.out.print(" Storage: "+getHostList().get(idx).getStorage());
 				System.out.print(" PE: "+freePesTmp.get(idx));
@@ -178,7 +183,7 @@ public class VmAllocationPolicyFuzzy extends VmAllocationPolicy {
 
 		}
 		long timeEnd= System.nanoTime();
-    	System.out.println(timeEnd);
+//    	System.out.println(timeEnd);
     	System.out.println("Simulation took time "+ (timeEnd - timeStart)+" nanoseconds");
 		return result;
 	}

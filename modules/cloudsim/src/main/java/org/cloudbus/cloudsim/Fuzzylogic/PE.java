@@ -72,7 +72,7 @@ public class Pe {
 				+ ", highV=" + highPe + "]";
 	}
 	
-	void reset() {
+	public void reset() {
 		this.isHighPe=false;
 		this.isMedPe=false;
 		this.isLowPe=false;

@@ -58,7 +58,7 @@ public class Host {
 	/** The datacenter where the host is placed. */
 	private Datacenter datacenter;
 	
-	private float priority;
+	private double priority;
 	/**
 	 * Instantiates a new host.
 	 * 
@@ -638,11 +638,11 @@ public class Host {
 				+ ", failed=" + failed + ", vmsMigratingIn=" + vmsMigratingIn + ", datacenter=" + datacenter + "]";
 	}
 	
-	public void setPriority(float priority) {
+	public void setPriority(double priority) {
 		this.priority = priority;
 	}
 	
-	public float getPriority() {
+	public double getPriority() {
 		return this.priority;
 	}
 }

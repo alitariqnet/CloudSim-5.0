@@ -192,10 +192,10 @@ public class Simulation2 {
 	    	peList.add(new Pe(0, new PeProvisionerSimple(mips))); // need to store Pe id and MIPS Rating
 	    	peList.add(new Pe(1, new PeProvisionerSimple(mips)));
 	    	// when i is even, create quad core machine else when i is odd, create dual core machine
-	    	if(i%2==0) {
+//	    	if(i%2==0) {
 	    	peList.add(new Pe(2, new PeProvisionerSimple(mips)));
 	    	peList.add(new Pe(3, new PeProvisionerSimple(mips)));
-	    	}
+//	    	}
 	    	
 	        //4. Create Host with its id and list of PEs and add them to the list of machines
 	        //int hostId=0;

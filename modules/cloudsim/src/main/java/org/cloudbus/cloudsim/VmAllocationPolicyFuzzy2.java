@@ -28,8 +28,8 @@ import org.cloudbus.cloudsim.core.CloudSim;
  */
 public class VmAllocationPolicyFuzzy2 extends VmAllocationPolicy {
 	
-	private float maxPriority;
-	private float crisp;
+	private double maxPriority;
+	private double crisp;
 	int idx = -1;
 	/** The map between each VM and its allocated host.
          * The map key is a VM UID and the value is the allocated host for that VM. */
@@ -254,54 +254,53 @@ public class VmAllocationPolicyFuzzy2 extends VmAllocationPolicy {
 		return false;
 	}
 	
-	// use these in forming rules
-			boolean isLowSTORAGE = false;
-			boolean isMedSTORAGE = false;
-			boolean isHighSTORAGE = false;
-			
-			// use these to get the calculated values
-			float lowSTORAGE ;
-			float medSTORAGE;
-			float highSTORAGE;
-			
+		// use these in forming rules
+		boolean isLowStorage = false;
+		boolean isMedStorage = false;
+		boolean isHighStorage = false;
+		
+		// use these to get the calculated values
+		float lowStorage ;
+		float medStorage;
+		float highStorage;
 			
 		// calculate the membership function values
 		public void initSTORAGE(float storage) {
 			if(storage<25000) {
-				lowSTORAGE=1;
-				isLowSTORAGE=true;
-				medSTORAGE=0;
-				highSTORAGE=0;
+				lowStorage=1;
+				isLowStorage=true;
+				medStorage=0;
+				highStorage=0;
 			}
 			else if(storage>=25000&&storage<62500) {
-				lowSTORAGE=(62500-storage)/(62500-25000);
-				isLowSTORAGE=true;
+				lowStorage=(62500-storage)/(62500-25000);
+				isLowStorage=true;
 				
-				medSTORAGE=(storage-25000)/(62500-25000);
+				medStorage=(storage-25000)/(62500-25000);
 				if(storage!=25000)
-					isMedSTORAGE=true;
-				highSTORAGE=0;
+					isMedStorage=true;
+				highStorage=0;
 			}
 			else if(storage==62500) {
-				lowSTORAGE=0;
-				medSTORAGE=1;
-				isMedSTORAGE=true;
-				highSTORAGE=0;
+				lowStorage=0;
+				medStorage=1;
+				isMedStorage=true;
+				highStorage=0;
 			}
 			else if(storage>62500&&storage<=100000) {
-				lowSTORAGE=0;
-				medSTORAGE=(100000-storage)/(100000-62500);
+				lowStorage=0;
+				medStorage=(100000-storage)/(100000-62500);
 				if(storage!=100000)
-				isMedSTORAGE=true;
+				isMedStorage=true;
 				
-				highSTORAGE=(storage-62500)/(100000-62500);
-				isHighSTORAGE=true;
+				highStorage=(storage-62500)/(100000-62500);
+				isHighStorage=true;
 			}
 			else if(storage>100000) {
-				lowSTORAGE=0;
-				medSTORAGE=0;
-				highSTORAGE=1;
-				isHighSTORAGE=true;
+				lowStorage=0;
+				medStorage=0;
+				highStorage=1;
+				isHighStorage=true;
 			}
 		}
 
@@ -320,98 +319,98 @@ public class VmAllocationPolicyFuzzy2 extends VmAllocationPolicy {
 		
 		
 		void resetSTORAGE() {
-			this.isHighSTORAGE=false;
-			this.isMedSTORAGE=false;
-			this.isLowSTORAGE=false;
-			this.highSTORAGE=0.0f;
-			this.medSTORAGE=0.0f;
-			this.lowSTORAGE=0.0f;
+			this.isHighStorage=false;
+			this.isMedStorage=false;
+			this.isLowStorage=false;
+			this.highStorage=0.0f;
+			this.medStorage=0.0f;
+			this.lowStorage=0.0f;
 		}
 		
 		// use these in forming rules
-				boolean isLowRAM = false;
-				boolean isMedRAM = false;
-				boolean isHighRAM = false;
-				
-				// use these to get the calculated values
-				float lowRAM;
-				float medRAM;
-				float highRAM;
-				
-				
-			// calculate the membership function values
-			public void initRAM(float ram) {
-				if(ram<512) {
-					lowRAM=1;
-					isLowRAM=true;
-					medRAM=0;
-					highRAM=0;
-				}
-				else if(ram>=512&&ram<1280) {
-					lowRAM=(1280-ram)/(1280-512);
-					isLowRAM=true;
-
-					medRAM=(ram-512)/(1280-512);
-					if(ram!=512)
-					isMedRAM=true;
-					
-					highRAM=0;
-				}
-				else if(ram==1280) {
-					lowRAM=0;
-					medRAM=1;
-					isMedRAM=true;
-					highRAM=0;
-				}
-				else if(ram>1280&&ram<=2048) {
-					lowRAM=0;
-					
-					medRAM=(2048-ram)/(2048-1280);
-					if(ram!=2048)
-					isMedRAM=true;
-					
-					highRAM=(ram-1280)/(2048-1280);
-					isHighRAM=true;
-				}
-				else if(ram>2048) {
-					lowRAM=0;
-					medRAM=0;
-					highRAM=1;
-					isHighRAM=true;
-				}
+		boolean isLowRAM = false;
+		boolean isMedRAM = false;
+		boolean isHighRAM = false;
+		
+		// use these to get the calculated values
+		float lowRAM;
+		float medRAM;
+		float highRAM;
+			
+			
+		// calculate the membership function values
+		public void initRAM(float ram) {
+			if(ram<512) {
+				lowRAM=1;
+				isLowRAM=true;
+				medRAM=0;
+				highRAM=0;
 			}
+			else if(ram>=512&&ram<1280) {
+				lowRAM=(1280-ram)/(1280-512);
+				isLowRAM=true;
 
-			// Above method formulates the function below
-			
-			//		1|low    med    high
-			//		 |\      /\      /
-			//	     | \    /  \    /
-			//		 |	\  /    \  /
-			//	  0.5|	 \/      \/
-			//	 	 |	 /\      /\
-			//	 	 |  /  \    /  \
-			//   	 | /    \  /    \
-			//  	0|/______\/______\____________
-			//	  	  512   1280    2048
-			
-			void resetRAM() {
-				this.isHighRAM=false;
-				this.isMedRAM=false;
-				this.isLowRAM=false;
-				this.highRAM=0.0f;
-				this.medRAM=0.0f;
-				this.lowRAM=0.0f;
+				medRAM=(ram-512)/(1280-512);
+				if(ram!=512)
+				isMedRAM=true;
+				
+				highRAM=0;
 			}
+			else if(ram==1280) {
+				lowRAM=0;
+				medRAM=1;
+				isMedRAM=true;
+				highRAM=0;
+			}
+			else if(ram>1280&&ram<=2048) {
+				lowRAM=0;
+				
+				medRAM=(2048-ram)/(2048-1280);
+				if(ram!=2048)
+				isMedRAM=true;
+				
+				highRAM=(ram-1280)/(2048-1280);
+				isHighRAM=true;
+			}
+			else if(ram>2048) {
+				lowRAM=0;
+				medRAM=0;
+				highRAM=1;
+				isHighRAM=true;
+			}
+		}
+
+		// Above method formulates the function below
+		
+		//		1|low    med    high
+		//		 |\      /\      /
+		//	     | \    /  \    /
+		//		 |	\  /    \  /
+		//	  0.5|	 \/      \/
+		//	 	 |	 /\      /\
+		//	 	 |  /  \    /  \
+		//   	 | /    \  /    \
+		//  	0|/______\/______\____________
+		//	  	  512   1280    2048
 			
-			// use these in forming rules
-			boolean isLowPE = false;
-			boolean isMedPE = false;
-			boolean isHighPE = false;
+		void resetRAM() {
+			this.isHighRAM=false;
+			this.isMedRAM=false;
+			this.isLowRAM=false;
+			this.highRAM=0.0f;
+			this.medRAM=0.0f;
+			this.lowRAM=0.0f;
+		}
 			
-			// use these to get the calculated values
-			float lowPE ;
-			float medPE;
-			float highPE;
+		// use these in forming rules
+		boolean isLowPE = false;
+		boolean isMedPE = false;
+		boolean isHighPE = false;
+		
+		// use these to get the calculated values
+		float lowPE ;
+		float medPE;
+		float highPE;
 			
 		// calculate the membership function values
 		public void initPE(float pe) {
@@ -480,229 +479,229 @@ public class VmAllocationPolicyFuzzy2 extends VmAllocationPolicy {
 			
 			// for first low
 			// for second low
-			if(isLowRAM==true && isLowSTORAGE==true && isLowPE==true) {
-				isLowDEFUZZ = true;
-				tmp = AND(AND(lowRAM,lowSTORAGE),lowPE);
-				if(tmp>lowDEFUZZ)
-					lowDEFUZZ = tmp;
+			if(isLowRAM==true && isLowStorage==true && isLowPE==true) {
+				isLowDefuzz = true;
+				tmp = AND(AND(lowRAM,lowStorage),lowPE);
+				if(tmp>lowDefuzz)
+					lowDefuzz = tmp;
 //				System.out.println("inside 1 defuzz.lowV "+defuzz.lowV);
 			}
 			
-			if(isLowRAM==true && isLowSTORAGE==true && isMedPE==true) {
-				isLowDEFUZZ = true;
-				tmp = AND(AND(lowRAM,lowSTORAGE),medPE);
-				if(tmp>lowDEFUZZ)
-					lowDEFUZZ = tmp;
+			if(isLowRAM==true && isLowStorage==true && isMedPE==true) {
+				isLowDefuzz = true;
+				tmp = AND(AND(lowRAM,lowStorage),medPE);
+				if(tmp>lowDefuzz)
+					lowDefuzz = tmp;
 //				System.out.println("inside 2 defuzz.lowV "+defuzz.lowV);
 			}
 			
-			if(isLowRAM==true && isLowSTORAGE==true && isHighPE==true) {
-				isLowDEFUZZ = true;
-				tmp = AND(AND(lowRAM,lowSTORAGE),highPE);
-				if(tmp>lowDEFUZZ)
-					lowDEFUZZ = tmp;
+			if(isLowRAM==true && isLowStorage==true && isHighPE==true) {
+				isLowDefuzz = true;
+				tmp = AND(AND(lowRAM,lowStorage),highPE);
+				if(tmp>lowDefuzz)
+					lowDefuzz = tmp;
 //				System.out.println("inside 3 defuzz.lowV "+defuzz.lowV);
 			}
 			
 			//for second medium
-			if(isLowRAM==true && isMedSTORAGE==true && isLowPE==true) {
-				isLowDEFUZZ = true;
-				tmp = AND(AND(lowRAM,medSTORAGE),lowPE);
-				if(tmp>lowDEFUZZ)
-					lowDEFUZZ = tmp;
+			if(isLowRAM==true && isMedStorage==true && isLowPE==true) {
+				isLowDefuzz = true;
+				tmp = AND(AND(lowRAM,medStorage),lowPE);
+				if(tmp>lowDefuzz)
+					lowDefuzz = tmp;
 //				System.out.println("inside 4 defuzz.lowV "+defuzz.lowV);
 			}
 			
-			if(isLowRAM==true && isMedSTORAGE==true && isMedPE==true) {
-				isLowDEFUZZ = true;
-				tmp = AND(AND(lowRAM,medSTORAGE),medPE);
-				if(tmp>lowDEFUZZ)
-					lowDEFUZZ = tmp;
+			if(isLowRAM==true && isMedStorage==true && isMedPE==true) {
+				isLowDefuzz = true;
+				tmp = AND(AND(lowRAM,medStorage),medPE);
+				if(tmp>lowDefuzz)
+					lowDefuzz = tmp;
 //				System.out.println("inside 5 defuzz.lowV "+defuzz.lowV);
 			}
 			
-			if(isLowRAM==true && isMedSTORAGE==true && isHighPE==true) {
-				isLowDEFUZZ = true;
-				tmp = AND(AND(lowRAM,medSTORAGE),highPE);
-				if(tmp>lowDEFUZZ)
-					lowDEFUZZ = tmp;
+			if(isLowRAM==true && isMedStorage==true && isHighPE==true) {
+				isLowDefuzz = true;
+				tmp = AND(AND(lowRAM,medStorage),highPE);
+				if(tmp>lowDefuzz)
+					lowDefuzz = tmp;
 //				System.out.println("inside 6 defuzz.lowV "+defuzz.lowV);
 			}
 			
 			// for second high
-			if(isLowRAM==true && isHighSTORAGE==true && isLowPE==true) {
-				isLowDEFUZZ = true;
-				tmp = AND(AND(lowRAM,highSTORAGE),lowPE);
-				if(tmp>lowDEFUZZ)
-					lowDEFUZZ = tmp;
+			if(isLowRAM==true && isHighStorage==true && isLowPE==true) {
+				isLowDefuzz = true;
+				tmp = AND(AND(lowRAM,highStorage),lowPE);
+				if(tmp>lowDefuzz)
+					lowDefuzz = tmp;
 //				System.out.println("inside 7 defuzz.lowV "+defuzz.lowV);
 			}
 			
-			if(isLowRAM==true && isHighSTORAGE==true && isMedPE==true) {
-				isLowDEFUZZ = true;
-				tmp = AND(AND(lowRAM,highSTORAGE),medPE);
-				if(tmp>lowDEFUZZ)
-					lowDEFUZZ = tmp;
+			if(isLowRAM==true && isHighStorage==true && isMedPE==true) {
+				isLowDefuzz = true;
+				tmp = AND(AND(lowRAM,highStorage),medPE);
+				if(tmp>lowDefuzz)
+					lowDefuzz = tmp;
 //				System.out.println("inside 8 defuzz.lowV "+defuzz.lowV);
 			}
 			
-			if(isLowRAM==true && isHighSTORAGE==true && isHighPE==true) {
-				isLowDEFUZZ = true;
-				tmp = AND(AND(lowRAM,highSTORAGE),highPE);
-				if(tmp>lowDEFUZZ)
-					lowDEFUZZ = tmp;
+			if(isLowRAM==true && isHighStorage==true && isHighPE==true) {
+				isLowDefuzz = true;
+				tmp = AND(AND(lowRAM,highStorage),highPE);
+				if(tmp>lowDefuzz)
+					lowDefuzz = tmp;
 //				System.out.println("inside 9 defuzz.lowV "+defuzz.lowV);
 			}
 			
 			//for first medium
 			// for second low
-			if(isMedRAM==true && isLowSTORAGE==true && isLowPE==true) {
-				isLowDEFUZZ = true;
-				tmp = AND(AND(medRAM,lowSTORAGE),lowPE);
-				if(tmp>lowDEFUZZ)
-					lowDEFUZZ = tmp;
+			if(isMedRAM==true && isLowStorage==true && isLowPE==true) {
+				isLowDefuzz = true;
+				tmp = AND(AND(medRAM,lowStorage),lowPE);
+				if(tmp>lowDefuzz)
+					lowDefuzz = tmp;
 //				System.out.println("inside 10 defuzz.lowV "+defuzz.lowV);
 			}
 			
-			if(isMedRAM==true && isLowSTORAGE==true && isMedPE==true) {
-				isLowDEFUZZ = true;
-				tmp = AND(AND(medRAM,lowSTORAGE),medPE);
-				if(tmp>lowDEFUZZ)
-					lowDEFUZZ = tmp;
+			if(isMedRAM==true && isLowStorage==true && isMedPE==true) {
+				isLowDefuzz = true;
+				tmp = AND(AND(medRAM,lowStorage),medPE);
+				if(tmp>lowDefuzz)
+					lowDefuzz = tmp;
 //				System.out.println("inside 11 defuzz.lowV "+defuzz.lowV);
 			}
 			
-			if(isMedRAM==true && isLowSTORAGE==true && isHighPE==true) {
-				isLowDEFUZZ = true;
-				tmp = AND(AND(medRAM,lowSTORAGE),highPE);
-				if(tmp>lowDEFUZZ)
-					lowDEFUZZ = tmp;
+			if(isMedRAM==true && isLowStorage==true && isHighPE==true) {
+				isLowDefuzz = true;
+				tmp = AND(AND(medRAM,lowStorage),highPE);
+				if(tmp>lowDefuzz)
+					lowDefuzz = tmp;
 //				System.out.println("inside 12 defuzz.lowV "+defuzz.lowV);
 			}
 			
 			//for second medium
-			if(isMedRAM==true && isMedSTORAGE==true && isLowPE==true) {
-				isLowDEFUZZ = true;
-				tmp = AND(AND(medRAM,medSTORAGE),lowPE);
-				if(tmp>lowDEFUZZ)
-					lowDEFUZZ = tmp;
+			if(isMedRAM==true && isMedStorage==true && isLowPE==true) {
+				isLowDefuzz = true;
+				tmp = AND(AND(medRAM,medStorage),lowPE);
+				if(tmp>lowDefuzz)
+					lowDefuzz = tmp;
 //				System.out.println("inside 13 defuzz.lowV "+defuzz.lowV);
 			}
 			
-			if(isMedRAM==true && isMedSTORAGE==true && isMedPE==true) {
-				isMedDEFUZZ = true;
-				tmp = AND(AND(medRAM,medSTORAGE),medPE);
-				if(tmp>medDEFUZZ)
-					medDEFUZZ = tmp;
+			if(isMedRAM==true && isMedStorage==true && isMedPE==true) {
+				isMedDefuzz = true;
+				tmp = AND(AND(medRAM,medStorage),medPE);
+				if(tmp<medDefuzz)
+					medDefuzz = tmp;
 //				System.out.println("inside 14 defuzz.medV "+defuzz.medV);
 			}
 			
-			if(isMedRAM==true && isMedSTORAGE==true && isHighPE==true) {
-				isMedDEFUZZ = true;
-				tmp = AND(AND(medRAM,medSTORAGE),highPE);
-				if(tmp>medDEFUZZ)
-					medDEFUZZ = tmp;
+			if(isMedRAM==true && isMedStorage==true && isHighPE==true) {
+				isMedDefuzz = true;
+				tmp = AND(AND(medRAM,medStorage),highPE);
+				if(tmp<medDefuzz)
+					medDefuzz = tmp;
 //				System.out.println("inside 15 defuzz.medV "+defuzz.medV);
 			}
 			
 			// for second high
-			if(isMedRAM==true && isHighSTORAGE==true && isLowPE==true) {
-				isLowDEFUZZ = true;
-				tmp = AND(AND(medRAM,highSTORAGE),lowPE);
-				if(tmp>lowDEFUZZ)
-					lowDEFUZZ = tmp;
+			if(isMedRAM==true && isHighStorage==true && isLowPE==true) {
+				isLowDefuzz = true;
+				tmp = AND(AND(medRAM,highStorage),lowPE);
+				if(tmp>lowDefuzz)
+					lowDefuzz = tmp;
 //				System.out.println("inside 16 defuzz.lowV "+defuzz.lowV);
 			}
 			
-			if(isMedRAM==true && isHighSTORAGE==true && isMedPE==true) {
-				isMedDEFUZZ = true;
-				tmp = AND(AND(medRAM,highSTORAGE),medPE);
-				if(tmp>medDEFUZZ)
-					medDEFUZZ = tmp;
+			if(isMedRAM==true && isHighStorage==true && isMedPE==true) {
+				isMedDefuzz = true;
+				tmp = AND(AND(medRAM,highStorage),medPE);
+				if(tmp<medDefuzz)
+					medDefuzz = tmp;
 //				System.out.println("inside 17 defuzz.medV "+defuzz.medV);
 			}
 			
-			if(isMedRAM==true && isHighSTORAGE==true && isHighPE==true) {
-				isMedDEFUZZ = true;
-				tmp = AND(AND(medRAM,highSTORAGE),highPE);
-				if(tmp>medDEFUZZ)
-					medDEFUZZ = tmp;
+			if(isMedRAM==true && isHighStorage==true && isHighPE==true) {
+				isMedDefuzz = true;
+				tmp = AND(AND(medRAM,highStorage),highPE);
+				if(tmp<medDefuzz)
+					medDefuzz = tmp;
 //				System.out.println("inside 18 defuzz.medV "+defuzz.medV);
 			}
 			
 			// for first high
 			// for second low
-			if(isHighRAM==true && isLowSTORAGE==true && isLowPE==true) {
-				isLowDEFUZZ = true;
-				tmp = AND(AND(highRAM,lowSTORAGE),lowPE);
-				if(tmp>lowDEFUZZ)
-					lowDEFUZZ = tmp;
+			if(isHighRAM==true && isLowStorage==true && isLowPE==true) {
+				isLowDefuzz = true;
+				tmp = AND(AND(highRAM,lowStorage),lowPE);
+				if(tmp>lowDefuzz)
+					lowDefuzz = tmp;
 //				System.out.println("inside 19 defuzz.lowV "+defuzz.lowV);
 			}
 			
-			if(isHighRAM==true && isLowSTORAGE==true && isMedPE==true) {
-				isLowDEFUZZ = true;
-				tmp = AND(AND(highRAM,lowSTORAGE),medPE);
-				if(tmp>lowDEFUZZ)
-					lowDEFUZZ = tmp;
+			if(isHighRAM==true && isLowStorage==true && isMedPE==true) {
+				isLowDefuzz = true;
+				tmp = AND(AND(highRAM,lowStorage),medPE);
+				if(tmp>lowDefuzz)
+					lowDefuzz = tmp;
 //				System.out.println("inside 20 defuzz.lowV "+defuzz.lowV);
 			}
 			
-			if(isHighRAM==true && isLowSTORAGE==true && isHighPE==true) {
-				isLowDEFUZZ = true;
-				tmp = AND(AND(highRAM,lowSTORAGE),highPE);
-				if(tmp>lowDEFUZZ)
-					lowDEFUZZ = tmp;
+			if(isHighRAM==true && isLowStorage==true && isHighPE==true) {
+				isLowDefuzz = true;
+				tmp = AND(AND(highRAM,lowStorage),highPE);
+				if(tmp>lowDefuzz)
+					lowDefuzz = tmp;
 //				System.out.println("inside 21 defuzz.lowV "+defuzz.lowV);
 			}
 			
 			//for second medium
-			if(isHighRAM==true && isMedSTORAGE==true && isLowPE==true) {
-				isLowDEFUZZ = true;
-				tmp = AND(AND(lowRAM,lowSTORAGE),lowPE);
-				if(tmp>lowDEFUZZ)
-					lowDEFUZZ = tmp;
+			if(isHighRAM==true && isMedStorage==true && isLowPE==true) {
+				isLowDefuzz = true;
+				tmp = AND(AND(lowRAM,lowStorage),lowPE);
+				if(tmp>lowDefuzz)
+					lowDefuzz = tmp;
 //				System.out.println("inside 22 defuzz.lowV "+defuzz.lowV);
 			}
 			
-			if(isHighRAM==true && isMedSTORAGE==true && isMedPE==true) {
-				isMedDEFUZZ = true;
-				tmp = AND(AND(lowRAM,lowSTORAGE),lowPE);
-				if(tmp>medDEFUZZ)
-					medDEFUZZ = tmp;
+			if(isHighRAM==true && isMedStorage==true && isMedPE==true) {
+				isMedDefuzz = true;
+				tmp = AND(AND(lowRAM,lowStorage),lowPE);
+				if(tmp<medDefuzz)
+					medDefuzz = tmp;
 //				System.out.println("inside 23 defuzz.medV "+defuzz.medV);
 			}
 			
-			if(isHighRAM==true && isMedSTORAGE==true && isHighPE==true) {
-				isMedDEFUZZ = true;
-				tmp = AND(AND(highRAM,medSTORAGE),highPE);
-				if(tmp>medDEFUZZ)
-					medDEFUZZ = tmp;
+			if(isHighRAM==true && isMedStorage==true && isHighPE==true) {
+				isMedDefuzz = true;
+				tmp = AND(AND(highRAM,medStorage),highPE);
+				if(tmp<medDefuzz)
+					medDefuzz = tmp;
 //				System.out.println("inside 24 defuzz.medV "+defuzz.medV);
 			}
 			
 			// for second high
-			if(isHighRAM==true && isHighSTORAGE==true && isLowPE==true) {
-				isLowDEFUZZ = true;
-				tmp = AND(AND(highRAM,highSTORAGE),lowPE);
-				if(tmp>lowDEFUZZ)
-					lowDEFUZZ = tmp;
+			if(isHighRAM==true && isHighStorage==true && isLowPE==true) {
+				isLowDefuzz = true;
+				tmp = AND(AND(highRAM,highStorage),lowPE);
+				if(tmp>lowDefuzz)
+					lowDefuzz = tmp;
 //				System.out.println("inside 25 defuzz.lowV "+defuzz.lowV);
 			}
 			
-			if(isHighRAM==true && isHighSTORAGE==true && isMedPE==true) {
-				isMedDEFUZZ = true;
-				tmp = AND(AND(highRAM,highSTORAGE),medPE);
-				if(tmp>medDEFUZZ)
-					medDEFUZZ = tmp;
+			if(isHighRAM==true && isHighStorage==true && isMedPE==true) {
+				isMedDefuzz = true;
+				tmp = AND(AND(highRAM,highStorage),medPE);
+				if(tmp<medDefuzz)
+					medDefuzz = tmp;
 //				System.out.println("inside 26 defuzz.medV "+defuzz.medV);
 			}
 			
-			if(isHighRAM==true && isHighSTORAGE==true && isHighPE==true) {
-				isHighDEFUZZ = true;
-				tmp = AND(AND(highRAM,highSTORAGE),highPE);
-				if(tmp>highDEFUZZ)
-					highDEFUZZ = tmp;
+			if(isHighRAM==true && isHighStorage==true && isHighPE==true) {
+				isHighDefuzz = true;
+				tmp = AND(AND(highRAM,highStorage),highPE);
+				if(tmp>highDefuzz)
+					highDefuzz = tmp;
 //				System.out.println("inside 27 defuzz.highV "+defuzz.highV);
 			}
 		}
@@ -722,34 +721,101 @@ public class VmAllocationPolicyFuzzy2 extends VmAllocationPolicy {
 		}
 		
 		// use these in forming rules as output parameter
-		boolean isLowDEFUZZ = false;
-		boolean isMedDEFUZZ = false;
-		boolean isHighDEFUZZ = false;
+		boolean isLowDefuzz = false;
+		boolean isMedDefuzz = false;
+		boolean isHighDefuzz = false;
 		
 		// use these to get the calculated values for calculating crisp output
 		float tmp;
-		float lowDEFUZZ;
-		float medDEFUZZ;
-		float highDEFUZZ;
+		float lowDefuzz;
+		float medDefuzz;
+		float highDefuzz;
 				
 		void resetDEFUZZ() {
-			this.isHighDEFUZZ=false;
-			this.isMedDEFUZZ=false;
-			this.isLowDEFUZZ=false;
-			this.highDEFUZZ=0.0f;
-			this.medDEFUZZ=0.0f;
-			this.lowDEFUZZ=0.0f;
+			this.isHighDefuzz=false;
+			this.isMedDefuzz=false;
+			this.isLowDefuzz=false;
+			this.highDefuzz=0.0f;
+			this.medDefuzz=0.0f;
+			this.lowDefuzz=0.0f;
 		}
 		
-		public float defuzzification() {
-//			System.out.println("lowV: "+lowV+" medV: "+medV+" highV: "+highV);
-			float f = ((0+1+2)*lowDEFUZZ)+((3+4+5+6+7)*medDEFUZZ)+((8+9+10)*highDEFUZZ);
-//			System.out.println("f: "+f);
-			float l = ((lowDEFUZZ*3)+(medDEFUZZ*5)+(highDEFUZZ*3));
-//			System.out.println("l: "+l);
+		public double defuzzification() {
+			double f = 0;
+			double a = 0,b,c,e,g,h,l;
+			
+			System.out.println("");
+			System.out.println("lowDefuzz: "+ lowDefuzz + " medDefuzz:"+medDefuzz+" highDefuzz:"+highDefuzz);
+			
+			if (lowDefuzz>=0.75) {
+				a = ((1*0.75)+(2*0.5)+(3*0.25));
+				e = 0.75+0.5+0.25;
+				System.out.println("lowDefuzz>=0.75");
+			}
+			else if (lowDefuzz>=0.5) {
+				a = ((1*lowDefuzz)+(2*0.5)+(3*0.25));
+				e = lowDefuzz+0.5+0.25;
+				System.out.println("lowDefuzz>=0.5");
+			}
+			else if(lowDefuzz>=0.25) {
+				a = ((1*lowDefuzz)+(2*lowDefuzz)+(3*0.25));
+				e = lowDefuzz+lowDefuzz+0.25;
+				System.out.println("lowDefuzz>=0.25");
+			}
+			else {
+				a = ((1*lowDefuzz)+(2*lowDefuzz)+(3*lowDefuzz));
+				e = lowDefuzz+lowDefuzz+lowDefuzz;
+				System.out.println("lowDefuzz<0.25");
+			}
+				
+			if(medDefuzz>=0.75) {
+				b = (((2*0.25)+(3*0.5)+(4*0.75)+(5*medDefuzz)+(6*0.75)+(7*0.5)+(8*0.25)));
+				g = 0.25+0.5+0.75+medDefuzz+0.75+0.5+0.25;
+				System.out.println("medDefuzz>=0.75");
+			}
+			else if(medDefuzz>=0.5) {
+				b = (((2*0.25)+(3*0.5)+(4*medDefuzz)+(5*medDefuzz)+(6*medDefuzz)+(7*0.5)+(8*0.25)));
+				g = 0.25+0.5+medDefuzz+medDefuzz+medDefuzz+0.5+0.25;
+				System.out.println("medDefuzz>=0.5");
+			}
+			else if(medDefuzz>=0.25) {
+				b = (((2*0.25)+(3*medDefuzz)+(4*medDefuzz)+(5*medDefuzz)+(6*medDefuzz)+(7*medDefuzz)+(8*0.25)));
+				g = 0.25+medDefuzz+medDefuzz+medDefuzz+medDefuzz+medDefuzz+0.25;
+				System.out.println("medDefuzz>=0.25");
+			}
+			else {
+				b = (((2*medDefuzz)+(3*medDefuzz)+(4*medDefuzz)+(5*medDefuzz)+(6*medDefuzz)+(7*medDefuzz)+(8*medDefuzz)));
+				g = medDefuzz+medDefuzz+medDefuzz+medDefuzz+medDefuzz+medDefuzz+medDefuzz;
+				System.out.println("medDefuzz<0.25");
+			}
+			
+			if(highDefuzz>=0.75) {
+				c = (((7*0.25)+(8*0.5)+(9*0.75)+(10*highDefuzz)));
+				h = 0.25+0.5+0.75+highDefuzz;
+				System.out.println("highDefuzz>=0.75");
+			}
+			else if(highDefuzz>=0.5) {
+				c = (((7*0.25)+(8*0.5)+(9*highDefuzz)+(10*highDefuzz)));
+				h = 0.25+0.5+highDefuzz+highDefuzz;
+				System.out.println("highDefuzz>=0.5");
+			}
+			else if(highDefuzz>=0.25) {
+				c = (((7*0.25)+(8*highDefuzz)+(9*highDefuzz)+(10*highDefuzz)));
+				h = 0.25+highDefuzz+highDefuzz+highDefuzz;
+				System.out.println("highDefuzz>=0.25");
+			}
+			else {
+				c = (((7*highDefuzz)+(8*highDefuzz)+(9*highDefuzz)+(10*highDefuzz)));
+				h = highDefuzz+highDefuzz+highDefuzz+highDefuzz;
+				System.out.println("highDefuzz<0.25");
+			}
+			
+			f = a+b+c;
+			System.out.println("a: "+a+" b: "+b+" c: "+c+" f: "+f);
+			l = e+g+h;
+			System.out.println("e: "+e+" g: "+g+" h: "+h+" l: "+l);
 //			crisp = (float) f/l;
-//			System.out.println(crisp);
 //			return crisp/10;
-			return (float) f/l;
+			return f/l;
 		}
 }

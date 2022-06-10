@@ -67,7 +67,7 @@ public class Ram {
 	//  	0|/______\/______\____________
 	//	  	  512   1280    2048
 	
-	void reset() {
+	public void reset() {
 		this.isHighRam=false;
 		this.isMedRam=false;
 		this.isLowRam=false;
